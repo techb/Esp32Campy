@@ -3,12 +3,14 @@
 	<head>
 		<title>esp32 Flask App</title>
 	</head>
+
 	<style>
 		img {
 			width: 640px;
 			height: 480px;
 		}
 	</style>
+
 	<body>
 		<h1>Esp32 Cam</h1>
 		<img id="stream" src="" />
@@ -16,7 +18,6 @@
 	</body>
 
 	<script>
-		console.log("testing12");
 		const img = document.getElementById('stream');
 		const WS_URL = 'ws://127.0.0.1:5000';
 		const ws = new WebSocket(WS_URL);
@@ -30,6 +31,5 @@
 			urlObject = URL.createObjectURL(new Blob([arrayBuffer]));
 			img.src = urlObject;
 		}
-
 	</script>
 </html>
