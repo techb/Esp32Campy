@@ -6,7 +6,9 @@ This is a fun hobby project and not meant for use in production environments.
 - **WebSocket Server**: Handles the websocket connections. Tracks currently connected clients and removes them when their connections drop. When the WS server receives  messages/data it will echo/resend it to all other connected clients.
 - **Flask**: Simple flask server handling front-end connections. Serves a single html page containing an img tag for the video data and buttons to control the ESP32 Cam module.
 
-![Screenshot](READMEFILES/img/working-stream-low-rez.png)
+![Screenshot 1](READMEFILES/img/splash-page.png)
+![Screenshot 2](READMEFILES/img/waiting-on-espcam.png)
+![Screenshot 3](READMEFILES/img/working-stream-low-rez.png)
 
 
 ## Software Requirements
