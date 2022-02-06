@@ -41,8 +41,6 @@ This is a fun hobby project and not meant for use in production environments.
 
 
 ## To Do
-- Can't ctrl+c to exit servers, I am forced to use task manager and kill python
-  - has to do with the threading
 - Set message events to trigger pin actions on the ESP32
   - Confirmed working and can parse JSON on ESP32
   - Just need to write methods for all of buttons

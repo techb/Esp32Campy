@@ -1,4 +1,4 @@
-import threading
+import threading, time
 
 # import Websocket and Flask servers
 from classes.WSServer import WSServer
@@ -19,15 +19,16 @@ def runFS():
 
 
 def main():
-	ws_thread = threading.Thread(target=runWS)
-	fs_thread = threading.Thread(target=runFS)
+	ws_thread = threading.Thread(target=runWS, daemon=True)
+	fs_thread = threading.Thread(target=runFS, daemon=True)
 
 	# Start threads and run forever
 	ws_thread.start()
 	fs_thread.start()
+	while threading.active_count() > 0:
+		time.sleep(0.1)
 
-	ws_thread.join()
-	fs_thread.join()
+	# No active threads, exiting
 	print("Both servers have exited")
 
 
