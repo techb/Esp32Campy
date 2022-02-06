@@ -68,7 +68,6 @@ function WSConnection(host, port){
 }
 
 
-// WSConnection();
 const connection_button = document.getElementById("connection-submit");
 connection_button.addEventListener('click', function(e){
 	e.preventDefault();

@@ -28,8 +28,6 @@ void setup() {
   Serial.setDebugOutput(true);
   Serial.println();
 
-  pinMode(15, OUTPUT);
-
   // set camera pins and settings
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -92,16 +90,6 @@ void setup() {
   client.onMessage([](WebsocketsMessage msg) {
     String raw_data = msg.data();
     handle_json(raw_data);
-    // DeserializationError error = deserializeJson(jsonBuffer, raw_data);
-    // if (error) {
-    //  Serial.print(F("deserializeJson() failed: "));
-    //  Serial.println(error.f_str());
-    //  return;
-    // }
-
-    // const char* message = jsonBuffer["message"];
-    // Serial.println(message);
-    // digitalWrite(15, HIGH);
   });
 }
 
@@ -116,11 +104,17 @@ void handle_json(String raw_data) {
 
   const char* message = jsonBuffer["message"];
   Serial.println(message);
+  // Work on functions for controlling the bot
+  // if(message == "up"){
+  //   Serial.println("go up");
+  // }
 }
 
 
 void loop() {
+  // check for any incoming messages
   client.poll();
+
   // get new image from camera
   camera_fb_t *fb = esp_camera_fb_get();
   if(!fb) {
