@@ -92,6 +92,7 @@ void setup() {
 }
 
 
+// handle incoming websocket messages
 void handle_json(String raw_data) {
   DeserializationError error = deserializeJson(jsonBuffer, raw_data);
   if (error) {
