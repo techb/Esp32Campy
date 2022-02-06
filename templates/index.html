@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>ESP32Campy</title>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+
+		<!-- Custom Styles -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	</head>
+
+	<body>
+		<h1>Esp32 Cam</h1>
+
+		<section id="connection-container" class="connection-container mt-5 mb-5">
+			<h3>WebSocket server information</h3>
+			<form class="connection-form">
+				<div class="form-group mb-3">
+					<label for="host-ip">WS Host</label>
+					<input type="text" class="form-control" id="host-ip" aria-describedby="host-ip" placeholder="WebSocket Server IP Address">
+					<small id="host-ip-help"><em>Example: 192.168.0.13</em></small>
+				</div>
+				<div class="form-group">
+					<label for="host-port">WS Port</label>
+					<input type="number" class="form-control" id="host-port" placeholder="5000">
+				</div>
+				<button id="connection-submit" type="submit" class="btn btn-success mt-3">Submit</button>
+			</form>
+
+			<div id="error-container" class="mt-4 alert alert-danger alert-dismissible fade hidden">
+				There was an issue connecting to the Web Socket Server.
+				<br/>
+				Make sure you have the correct IP and ports.
+				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			</div>
+		</section>
+
+		<section id="controls-container" class="controls-container hidden">
+			<img id="stream" class="hidden" src="" />
+			<img id="loading" class="hidden" src="https://digitalsynopsis.com/wp-content/uploads/2016/06/loading-animations-preloader-gifs-ui-ux-effects-8.gif" />
+			</div>
+
+			<div class="buttons-container">
+				<div class="dpad-container mt-4">
+					<nav class="d-pad">
+						<a class="up button" href="#"></a>
+						<a class="right button" href="#"></a>
+						<a class="down button" href="#"></a>
+						<a class="left button" href="#"></a>
+					</nav>
+				</div>
+				<div class="action-buttons">
+					<div class="top">
+						<a id="action-A" href="#" class="action-btn button A">
+							<span class="copy">A</span>
+							<span class="inner-circle"></span>
+						</a>
+						<a id="action-B" href="#" class="action-btn button B">
+							<span class="B copy">B</span>
+							<span class="inner-circle"></span>
+						</a>
+					</div>
+					<div class="bottom">
+						<a id="action-X" href="#" class="action-btn button X">
+							<span class="X copy">X</span>
+							<span class="inner-circle"></span>
+						</a>
+						<a id="action-Y" href="#" class="action-btn button Y">
+							<span class="Y copy">Y</span>
+							<span class="inner-circle"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+	</body>
+
+	<footer>
+		<!-- Custom JS -->
+		<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+	</footer>
+</html>
