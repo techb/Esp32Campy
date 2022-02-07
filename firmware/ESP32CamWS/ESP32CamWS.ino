@@ -11,7 +11,7 @@
 
 // network creds and server info
 const char* ssid = "Wu Tang LAN";
-const char* password = "ILoveCheeseSticks";
+const char* password = "MilkAndCookies";
 const char* websocket_server_host = "192.168.0.13";
 const uint16_t websocket_server_port = 5000;
 
@@ -21,6 +21,66 @@ StaticJsonDocument<255> jsonBuffer;
 // init the websocket client that connects to the ws server
 using namespace websockets;
 WebsocketsClient client;
+
+
+
+// quick and dirty for now
+// needs refactor and PWM for movement
+void forward() {
+  digitalWrite(12, HIGH);
+  digitalWrite(13, LOW);
+  digitalWrite(15, HIGH);
+  digitalWrite(14, LOW);
+}
+void reverse() {
+  Serial.println("reverse");
+  digitalWrite(12, LOW);
+  digitalWrite(13, HIGH);
+  digitalWrite(15, LOW);
+  digitalWrite(14, HIGH);
+}
+void hault() {
+  digitalWrite(12, LOW);
+  digitalWrite(13, LOW);
+  digitalWrite(15, LOW);
+  digitalWrite(14, LOW);
+}
+void left() {
+  digitalWrite(12, LOW);
+  digitalWrite(13, HIGH);
+  digitalWrite(15, HIGH);
+  digitalWrite(14, LOW);
+}
+void right() {
+  digitalWrite(12, HIGH);
+  digitalWrite(13, LOW);
+  digitalWrite(15, LOW);
+  digitalWrite(14, HIGH);
+}
+void a_button_on() {
+  digitalWrite(2, HIGH);
+}
+void a_button_off() {
+  digitalWrite(2, LOW);
+}
+void b_button_on() {
+  digitalWrite(4, HIGH);
+}
+void b_button_off() {
+  digitalWrite(4, LOW);
+}
+void x_button_on() {
+  digitalWrite(3, HIGH);
+}
+void x_button_off() {
+  digitalWrite(3, LOW);
+}
+void y_button_on() {
+  digitalWrite(1, HIGH);
+}
+void y_button_off() {
+  digitalWrite(1, LOW);
+}
 
 
 void setup() {
@@ -89,6 +149,15 @@ void setup() {
     String raw_data = msg.data();
     handle_json(raw_data);
   });
+
+  pinMode(12, OUTPUT); // IN1 MA
+  pinMode(13, OUTPUT); // IN2 MA
+  pinMode(15, OUTPUT); // IN3 MB
+  pinMode(14, OUTPUT); // IN4 MB
+  pinMode(2, OUTPUT); // A
+  pinMode(4, OUTPUT); // B
+//   pinMode(3, OUTPUT); // X
+//   pinMode(1, OUTPUT); // Y
 }
 
 
@@ -101,12 +170,56 @@ void handle_json(String raw_data) {
     return;
   }
 
+  // quick and dirty for now
+  // needs refactor
   const char* message = jsonBuffer["message"];
   Serial.println(message);
-  // Work on functions for controlling the bot
-  // if(message == "up"){
-  //   Serial.println("go up");
-  // }
+
+  // check message sent and deligate functions to execute
+  if(strcmp(message, "forward") == 0){
+    forward();
+  }
+  if(strcmp(message, "reverse") == 0){
+    reverse();
+  }
+  if(strcmp(message, "hault") == 0){
+    hault();
+  }
+  if(strcmp(message, "left") == 0){
+    left();
+  }
+  if(strcmp(message, "right") == 0){
+    right();
+  }
+
+  if(strcmp(message, "AON") == 0){
+    a_button_on();
+  }
+  if(strcmp(message, "AOFF") == 0){
+    a_button_off();
+  }
+  if(strcmp(message, "BON") == 0){
+    b_button_on();
+  }
+  if(strcmp(message, "BOFF") == 0){
+    b_button_off();
+  }
+
+  // Can run into issues here, these pins are used for UART and programming
+  // They can not have a load on them when programming?
+  //   Or maybe we need to pull it low/high when programming?
+  if(strcmp(message, "XON") == 0){
+    x_button_on();
+  }
+  if(strcmp(message, "XOFF") == 0){
+    x_button_off();
+  }
+  if(strcmp(message, "YOFF") == 0){
+    y_button_on();
+  }
+  if(strcmp(message, "YOFF") == 0){
+    y_button_off();
+  }
 }
 
 

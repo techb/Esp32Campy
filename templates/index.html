@@ -47,31 +47,31 @@
 			<div class="buttons-container">
 				<div class="dpad-container mt-4">
 					<nav class="d-pad">
-						<a class="up button" href="#"></a>
+						<a class="up forward button" href="#"></a>
 						<a class="right button" href="#"></a>
-						<a class="down button" href="#"></a>
+						<a class="down reverse button" href="#"></a>
 						<a class="left button" href="#"></a>
 					</nav>
 				</div>
 				<div class="action-buttons">
 					<div class="top">
 						<a id="action-A" href="#" class="action-btn button A">
-							<span class="copy">A</span>
-							<span class="inner-circle"></span>
+							<span class="copy A">A</span>
+							<span class="inner-circle A"></span>
 						</a>
 						<a id="action-B" href="#" class="action-btn button B">
 							<span class="B copy">B</span>
-							<span class="inner-circle"></span>
+							<span class="inner-circle B"></span>
 						</a>
 					</div>
 					<div class="bottom">
 						<a id="action-X" href="#" class="action-btn button X">
 							<span class="X copy">X</span>
-							<span class="inner-circle"></span>
+							<span class="inner-circle X"></span>
 						</a>
 						<a id="action-Y" href="#" class="action-btn button Y">
 							<span class="Y copy">Y</span>
-							<span class="inner-circle"></span>
+							<span class="Y inner-circle"></span>
 						</a>
 					</div>
 				</div>
@@ -83,6 +83,7 @@
 
 	<footer>
 		<!-- Custom JS -->
+		<script src="{{ url_for('static', filename='js/libgp.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 	</footer>
 </html>

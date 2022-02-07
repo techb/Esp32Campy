@@ -58,3 +58,5 @@ This is a fun hobby project and not meant for use in production environments.
 - d-pad buttons: https://saruwakakun.com/en/css3-buttons
 - AB/XY buttons: https://codepen.io/tswone/pen/GLzZLd
 - Bootstrap CSS: https://getbootstrap.com/
+- Gamepad support: https://w3c.github.io/gamepad/#remapping
+- Gamepad tutorial: https://beej.us/blog/data/javascript-gamepad/
