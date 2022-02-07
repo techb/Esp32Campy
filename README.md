@@ -41,10 +41,8 @@ This is a fun hobby project and not meant for use in production environments.
 
 
 ## To Do
-- Set message events to trigger pin actions on the ESP32
-  - Confirmed working and can parse JSON on ESP32
-  - Just need to write methods for all of buttons
 - Design/Print SMARS bot to house
+- Finish gamepad support
 - Wire diagram and schematics
 - Build/Project blog write up
 

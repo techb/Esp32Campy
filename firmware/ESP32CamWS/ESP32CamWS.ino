@@ -11,7 +11,7 @@
 
 // network creds and server info
 const char* ssid = "Wu Tang LAN";
-const char* password = "MilkAndCookies";
+const char* password = "ILoveCheeseSticks";
 const char* websocket_server_host = "192.168.0.13";
 const uint16_t websocket_server_port = 5000;
 
@@ -33,7 +33,6 @@ void forward() {
   digitalWrite(14, LOW);
 }
 void reverse() {
-  Serial.println("reverse");
   digitalWrite(12, LOW);
   digitalWrite(13, HIGH);
   digitalWrite(15, LOW);
@@ -156,8 +155,8 @@ void setup() {
   pinMode(14, OUTPUT); // IN4 MB
   pinMode(2, OUTPUT); // A
   pinMode(4, OUTPUT); // B
-//   pinMode(3, OUTPUT); // X
-//   pinMode(1, OUTPUT); // Y
+  pinMode(3, OUTPUT); // X
+  pinMode(1, OUTPUT); // Y
 }
 
 
@@ -206,8 +205,7 @@ void handle_json(String raw_data) {
   }
 
   // Can run into issues here, these pins are used for UART and programming
-  // They can not have a load on them when programming?
-  //   Or maybe we need to pull it low/high when programming?
+  // They can not have a load on them when programming
   if(strcmp(message, "XON") == 0){
     x_button_on();
   }

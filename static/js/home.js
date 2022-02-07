@@ -1,6 +1,11 @@
+// stop long click context popup on android
 window.oncontextmenu = function() { return false; }
+
+// global websocket object
 let ws;
 
+
+// helper for showing/hiding form and error alert
 function showConnectionForm(){
 	document.getElementById("loading").classList.add("hidden");
 	document.getElementById("controls-container").classList.add("hidden");
@@ -17,6 +22,7 @@ function showError(){
 }
 
 
+// handle websocket connection
 function WSConnection(host, port){
 	// check if connection form fields were empty
 	if(!host || !port){
@@ -73,6 +79,9 @@ function WSConnection(host, port){
 	}
 }
 
+
+// find which button was pressed or released
+// quick and dirty needs refactor
 function whichButtonOn(e, ws){
 	if(e.target.classList.contains("forward")){
 		ws.send(packJSON("forward"));
@@ -99,7 +108,6 @@ function whichButtonOn(e, ws){
 		ws.send(packJSON("Y"));
 	}
 }
-
 function whichButtonOff(e, ws){
 	if(e.target.classList.contains("forward")){
 		console.log("Off", "forward");
@@ -128,9 +136,11 @@ function whichButtonOff(e, ws){
 }
 
 
+// unpack websocket message json
 function packJSON(msg){
 	return JSON.stringify({"message": msg});
 }
+
 
 // get values from host and ip fields and start WS connection
 const connection_button = document.getElementById("connection-submit");
