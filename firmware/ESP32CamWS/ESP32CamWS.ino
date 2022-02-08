@@ -15,7 +15,7 @@
 
 // network creds and server info
 const char* ssid = "Wu Tang LAN";
-const char* password = "MilkAndCookies";
+const char* password = "ILoveCheeseBread";
 const char* websocket_server_host = "192.168.0.13";
 const uint16_t websocket_server_port = 5000;
 
