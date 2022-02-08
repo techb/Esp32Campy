@@ -67,7 +67,6 @@ function WSConnection(host, port){
 	// handle html button controls
 	const buttons = document.querySelectorAll('.button');
 	for(let i = 0; i < buttons.length; i++){
-		console.log(buttons[i]);
 		buttons[i].addEventListener('mousedown', function(e){
 			whichButtonOn(e, ws);
 			e.preventDefault();
@@ -77,8 +76,29 @@ function WSConnection(host, port){
 			e.preventDefault();
 		});
 	}
-}
 
+	// gamepad support
+	if(gpLib.supportsGamepads()){
+		console.log('[+] Gamepad supported');
+		// listen for new controller connected
+		window.addEventListener("gamepadconnected", () => {
+			console.log("[+] Gamepad connected");
+		});
+
+		function gamepadLoop() {
+			requestAnimationFrame(gamepadLoop);
+			let current_buttons = gpLib.getButtons();
+			if(current_buttons){
+				Object.keys(current_buttons).forEach(key => {
+					if(current_buttons[key]){
+						ws.send(packJSON(key));
+					}
+				});
+			}
+		}
+		gamepadLoop();
+	}
+}
 
 // find which button was pressed or released
 // quick and dirty needs refactor
@@ -96,43 +116,35 @@ function whichButtonOn(e, ws){
 		ws.send(packJSON("right"));
 	}
 	if(e.target.classList.contains("A")){
-		ws.send(packJSON("A"));
+		ws.send(packJSON("AON"));
 	}
 	if(e.target.classList.contains("B")){
-		ws.send(packJSON("B"));
-	}
-	if(e.target.classList.contains("X")){
-		ws.send(packJSON("X"));
+		ws.send(packJSON("BON"));
 	}
 	if(e.target.classList.contains("Y")){
-		ws.send(packJSON("Y"));
+		ws.send(packJSON("YON"));
 	}
+	// if(e.target.classList.contains("X")){
+	// 	ws.send(packJSON("XON"));
+	// }
 }
 function whichButtonOff(e, ws){
-	if(e.target.classList.contains("forward")){
-		console.log("Off", "forward");
+	if(e.target.classList.contains("forward", "reverse", "left", "right")){
+		ws.send(packJSON("hault"));
 	}
-	if(e.target.classList.contains("reverse")){
-		console.log("Off", "reverse");
-	}
-	if(e.target.classList.contains("left")){
-		console.log("Off", "left");
-	}
-	if(e.target.classList.contains("right")){
-		console.log("Off", "right");
-	}
+
 	if(e.target.classList.contains("A")){
-		console.log("Off", "A");
+		ws.send(packJSON("AOFF"));
 	}
 	if(e.target.classList.contains("B")){
-		console.log("Off", "B");
-	}
-	if(e.target.classList.contains("X")){
-		console.log("Off", "X");
+		ws.send(packJSON("BOFF"));
 	}
 	if(e.target.classList.contains("Y")){
-		console.log("Off", "Y");
+		ws.send(packJSON("YOFF"));
 	}
+	// if(e.target.classList.contains("X")){
+	// 	ws.send(packJSON("XOFF"));
+	// }
 }
 
 
@@ -150,19 +162,3 @@ connection_button.addEventListener('click', function(e){
 	const port = document.getElementById("host-port").value;
 	ws = WSConnection(host, port);
 });
-
-
-// // gamepad support
-// if(gpLib.supportsGamepads()){
-// 	// listen for new controller connected
-// 	window.addEventListener("gamepadconnected", () => {
-// 		console.log("Gamepad connected");
-// 	});
-
-// 	function gamepadLoop() {
-// 		requestAnimationFrame(gamepadLoop);
-// 		let current_buttons = gpLib.getButtons();
-// 		// console.log( current_buttons );
-// 	}
-// 	// gamepadLoop();
-// }

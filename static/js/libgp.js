@@ -9,10 +9,10 @@
 		"reverse": 13,
 		"left": 14,
 		"right": 15,
-		"A": 3,
-		"B": 2,
-		"X": 0,
-		"Y": 1
+		"AON": 3,
+		"BON": 2,
+		"XON": 0,
+		"YON": 1
 	}
 
 	/**
@@ -110,10 +110,9 @@
 
 		let rtn = {};
 		Object.keys(buttonMap).forEach(key => {
-			// console.log(key, buttonMap[key]);
+			rtn[key] = gamepad.buttons[buttonMap[key]].pressed;
 		});
-
-		return gamepad.buttons[12].pressed;
+		return rtn;
 	}
 
 

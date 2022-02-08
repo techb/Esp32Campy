@@ -4,6 +4,10 @@
 #include <ArduinoWebsockets.h>
 #include <ArduinoJson.h>
 
+/*
+  All Serial.print is commented out so the bot doesn't go crazy with GPIO 1 TX activity
+*/
+
 // specific to my board yours might be different if
 // not using the board listed in the BOM
 #define CAMERA_MODEL_AI_THINKER
@@ -11,7 +15,7 @@
 
 // network creds and server info
 const char* ssid = "Wu Tang LAN";
-const char* password = "ILoveCheeseSticks";
+const char* password = "MilkAndCookies";
 const char* websocket_server_host = "192.168.0.13";
 const uint16_t websocket_server_port = 5000;
 
@@ -21,7 +25,6 @@ StaticJsonDocument<255> jsonBuffer;
 // init the websocket client that connects to the ws server
 using namespace websockets;
 WebsocketsClient client;
-
 
 
 // quick and dirty for now
@@ -84,8 +87,8 @@ void y_button_off() {
 
 void setup() {
   Serial.begin(115200);
-  Serial.setDebugOutput(true);
-  Serial.println();
+  // Serial.setDebugOutput(true);
+  // Serial.println();
 
   // set camera pins and settings
   camera_config_t config;
@@ -118,7 +121,7 @@ void setup() {
   // camera init
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
-    Serial.printf("Camera init failed with error 0x%x", err);
+    // Serial.printf("Camera init failed with error 0x%x", err);
     return;
   }
 
@@ -126,18 +129,18 @@ void setup() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    // Serial.print(".");
   }
-  Serial.println("");
-  Serial.println("WiFi connected");
+  // Serial.println("");
+  // Serial.println("WiFi connected");
 
   // connect to websocket
-  Serial.println("Attempting WebSocket Connection");
+  // Serial.println("Attempting WebSocket Connection");
   while(!client.connect(websocket_server_host, websocket_server_port, "/")) {
     delay(500);
-    Serial.print(".");
+    // Serial.print(".");
   }
-  Serial.println("Websocket Connected!");
+  // Serial.println("Websocket Connected!");
 
   int res = 0;
   sensor_t * s = esp_camera_sensor_get();
@@ -155,8 +158,17 @@ void setup() {
   pinMode(14, OUTPUT); // IN4 MB
   pinMode(2, OUTPUT); // A
   pinMode(4, OUTPUT); // B
-  pinMode(3, OUTPUT); // X
   pinMode(1, OUTPUT); // Y
+  // pinMode(3, INPUT); // RX has to be input
+
+  // set everything low so the bot doesn't go crazy on startup
+  digitalWrite(12, LOW);
+  digitalWrite(13, LOW);
+  digitalWrite(15, LOW);
+  digitalWrite(14, LOW);
+  digitalWrite(2, LOW);
+  digitalWrite(4, LOW);
+  digitalWrite(1, LOW);
 }
 
 
@@ -164,15 +176,14 @@ void setup() {
 void handle_json(String raw_data) {
   DeserializationError error = deserializeJson(jsonBuffer, raw_data);
   if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
+    // Serial.print(F("deserializeJson() failed: "));
+    // Serial.println(error.f_str());
     return;
   }
 
   // quick and dirty for now
   // needs refactor
   const char* message = jsonBuffer["message"];
-  Serial.println(message);
 
   // check message sent and deligate functions to execute
   if(strcmp(message, "forward") == 0){
@@ -228,14 +239,14 @@ void loop() {
   // get new image from camera
   camera_fb_t *fb = esp_camera_fb_get();
   if(!fb) {
-    Serial.println("Camera capture failed");
+    // Serial.println("Camera capture failed");
     esp_camera_fb_return(fb);
     return;
   }
 
   // check it's in jpeg, needed I think for the raw blob binary?
   if(fb->format != PIXFORMAT_JPEG) {
-    Serial.println("Non-JPEG data not implemented");
+    // Serial.println("Non-JPEG data not implemented");
     return;
   }
 
