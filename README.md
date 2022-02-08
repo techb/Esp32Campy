@@ -32,8 +32,10 @@ This is a fun hobby project and not meant for use in production environments.
 
 ## 3D Print
 **--- WARNING! ---**
+
 The .gcode file provided uses a BLTouch.
 If you don't use a BLTouch you will need to remove `G29 ; Level bed` in the .gcode file.
+
 **----------------**
 
 #### Remixed
