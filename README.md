@@ -15,14 +15,32 @@ This is a fun hobby project and not meant for use in production environments.
 - websockets: https://github.com/aaugustin/websockets
 - Flask: https://flask.palletsprojects.com/
 
+
 ## Firmware Requirements
 - ArduinoJson: https://arduinojson.org/
 - Arduino Websockets: https://github.com/gilmaimon/ArduinoWebsockets
 - ESP32 Libs & Board manager: https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/
 
+
 ## BOM
 - ESP32 Cam: https://www.amazon.com/dp/B07S5PVZKV
 - USB to FTDI: https://www.sparkfun.com/products/9716
+- N20 Motors X2: https://www.amazon.com/gp/product/B07SQ4TV2T
+- H-Bridge: https://www.amazon.com/Aideepen-Driver-H-Bridge-Replace-Stepper/dp/B075S368Y2/
+- 18640 Batteries X2: https://www.amazon.com/LCLEBM-3400mAh-Battery-Spotlight-Flashlight/dp/B08H1NZLY7
+
+
+## 3D Print
+**--- WARNING! ---**
+The .gcode file provided uses a BLTouch.
+If you don't use a BLTouch you will need to remove `G29 ; Level bed` in the .gcode file.
+**----------------**
+
+#### Remixed
+- cam case: https://www.thingiverse.com/thing:4191077
+- 18640 battery holder: https://www.thingiverse.com/thing:2339441/files
+- base for battery holder: https://www.thingiverse.com/thing:2756968/files
+- SMARS robot: https://www.thingiverse.com/thing:2662828
 
 
 ## Run
@@ -41,12 +59,6 @@ This is a fun hobby project and not meant for use in production environments.
 
 
 ## To Do
-- Can't ctrl+c to exit servers, I am forced to use task manager and kill python
-  - has to do with the threading
-- Set message events to trigger pin actions on the ESP32
-  - Confirmed working and can parse JSON on ESP32
-  - Just need to write methods for all of buttons
-- Design/Print SMARS bot to house
 - Wire diagram and schematics
 - Build/Project blog write up
 
@@ -60,3 +72,6 @@ This is a fun hobby project and not meant for use in production environments.
 - d-pad buttons: https://saruwakakun.com/en/css3-buttons
 - AB/XY buttons: https://codepen.io/tswone/pen/GLzZLd
 - Bootstrap CSS: https://getbootstrap.com/
+- Gamepad support: https://w3c.github.io/gamepad/#remapping
+- Gamepad tutorial: https://beej.us/blog/data/javascript-gamepad/
+- RX GPIO 3 is always and only an input: https://electronics.stackexchange.com/a/445636

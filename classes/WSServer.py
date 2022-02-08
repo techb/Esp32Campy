@@ -18,9 +18,7 @@ class WSServer:
 		print("Added Client: ", websocket)
 		try:
 			async for message in websocket:
-				for conn in self.clients:
-					if conn != websocket:
-						await conn.send(message)
+				await self.broadcast(message, websocket)
 
 		except websockets.exceptions.ConnectionClosed as e:
 			print("Error: ", e)
@@ -29,6 +27,13 @@ class WSServer:
 			# remove disconnected client from list
 			print("Client Disconnected: ", websocket)
 			self.clients.remove(websocket)
+
+
+	# Broadcasts message to all clients except self
+	async def broadcast(self, message, websocket):
+		for conn in self.clients:
+			if conn != websocket:
+				await conn.send(message)
 
 
 	async def main(self):
