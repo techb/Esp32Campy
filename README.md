@@ -38,6 +38,8 @@ If you don't use a BLTouch you will need to remove `G29 ; Level bed` in the .gco
 
 **----------------**
 
+![stl preview 10 hours](/3DPrint/Slice-Screenshot.png)
+
 #### Remixed
 - cam case: https://www.thingiverse.com/thing:4191077
 - 18640 battery holder: https://www.thingiverse.com/thing:2339441/files
