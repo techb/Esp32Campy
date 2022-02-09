@@ -25,6 +25,7 @@ This is a fun hobby project and not meant for use in production environments.
 ## BOM
 - ESP32 Cam: https://www.amazon.com/dp/B07S5PVZKV
 - USB to FTDI: https://www.sparkfun.com/products/9716
+  - You'll need drivers: https://ftdichip.com/drivers/vcp-drivers/
 - N20 Motors X2: https://www.amazon.com/gp/product/B07SQ4TV2T
 - H-Bridge: https://www.amazon.com/Aideepen-Driver-H-Bridge-Replace-Stepper/dp/B075S368Y2/
 - 18640 Batteries X2: https://www.amazon.com/LCLEBM-3400mAh-Battery-Spotlight-Flashlight/dp/B08H1NZLY7

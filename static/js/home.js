@@ -1,31 +1,31 @@
 // stop long click context popup on android
-window.oncontextmenu = function() { return false; }
+window.oncontextmenu = function () { return false; }
 
 // global websocket object
 let ws;
 
 
 // helper for showing/hiding form and error alert
-function showConnectionForm(){
+function showConnectionForm() {
 	document.getElementById("loading").classList.add("hidden");
 	document.getElementById("controls-container").classList.add("hidden");
 	document.getElementById("connection-container").classList.remove("hidden");
 }
-function hideConnectionForm(){
+function hideConnectionForm() {
 	document.getElementById("loading").classList.remove("hidden");
 	document.getElementById("controls-container").classList.remove("hidden");
 	document.getElementById("connection-container").classList.add("hidden");
 }
-function showError(){
+function showError() {
 	document.getElementById("error-container").classList.remove("hidden");
 	document.getElementById("error-container").classList.add("show");
 }
 
 
 // handle websocket connection
-function WSConnection(host, port){
+function WSConnection(host, port) {
 	// check if connection form fields were empty
-	if(!host || !port){
+	if (!host || !port) {
 		showError();
 		return;
 	}
@@ -33,7 +33,7 @@ function WSConnection(host, port){
 
 	// setup websockets and start receiving images
 	const img = document.getElementById('stream');
-	const WS_URL = 'ws://'+host+':'+port;
+	const WS_URL = 'ws://' + host + ':' + port;
 	const ws = new WebSocket(WS_URL);
 	let stream_started = false;
 	let urlObject;
@@ -50,14 +50,14 @@ function WSConnection(host, port){
 
 	ws.onmessage = (message) => {
 		// remove loading gif and show stream
-		if(!stream_started){
+		if (!stream_started) {
 			document.getElementById("stream").classList.remove("hidden");
 			document.getElementById("loading").classList.add("hidden");
 			stream_started = true;
 			console.log("[+] Stream started");
 		}
 		const arrayBuffer = message.data;
-		if(urlObject){
+		if (urlObject) {
 			URL.revokeObjectURL(urlObject);
 		}
 		urlObject = URL.createObjectURL(new Blob([arrayBuffer]));
@@ -66,19 +66,19 @@ function WSConnection(host, port){
 
 	// handle html button controls
 	const buttons = document.querySelectorAll('.button');
-	for(let i = 0; i < buttons.length; i++){
-		buttons[i].addEventListener('mousedown', function(e){
+	for (let i = 0; i < buttons.length; i++) {
+		buttons[i].addEventListener('mousedown', function (e) {
 			whichButtonOn(e, ws);
 			e.preventDefault();
 		});
-		buttons[i].addEventListener('mouseup', function(e){
+		buttons[i].addEventListener('mouseup', function (e) {
 			whichButtonOff(e, ws);
 			e.preventDefault();
 		});
 	}
 
 	// gamepad support
-	if(gpLib.supportsGamepads()){
+	if (gpLib.supportsGamepads()) {
 		console.log('[+] Gamepad supported');
 		// listen for new controller connected
 		window.addEventListener("gamepadconnected", () => {
@@ -88,9 +88,9 @@ function WSConnection(host, port){
 		function gamepadLoop() {
 			requestAnimationFrame(gamepadLoop);
 			let current_buttons = gpLib.getButtons();
-			if(current_buttons){
+			if (current_buttons) {
 				Object.keys(current_buttons).forEach(key => {
-					if(current_buttons[key]){
+					if (current_buttons[key]) {
 						ws.send(packJSON(key));
 					}
 				});
@@ -102,61 +102,57 @@ function WSConnection(host, port){
 
 // find which button was pressed or released
 // quick and dirty needs refactor
-function whichButtonOn(e, ws){
-	if(e.target.classList.contains("forward")){
+function whichButtonOn(e, ws) {
+	if (e.target.classList.contains("forward")) {
 		ws.send(packJSON("forward"));
 	}
-	if(e.target.classList.contains("reverse")){
+	if (e.target.classList.contains("reverse")) {
 		ws.send(packJSON("reverse"));
 	}
-	if(e.target.classList.contains("left")){
+	if (e.target.classList.contains("left")) {
 		ws.send(packJSON("left"));
 	}
-	if(e.target.classList.contains("right")){
+	if (e.target.classList.contains("right")) {
 		ws.send(packJSON("right"));
 	}
-	if(e.target.classList.contains("A")){
+	if (e.target.classList.contains("A")) {
 		ws.send(packJSON("AON"));
 	}
-	if(e.target.classList.contains("B")){
+	if (e.target.classList.contains("B")) {
 		ws.send(packJSON("BON"));
 	}
-	if(e.target.classList.contains("Y")){
-		ws.send(packJSON("YON"));
-	}
-	// if(e.target.classList.contains("X")){
-	// 	ws.send(packJSON("XON"));
-	// }
 }
-function whichButtonOff(e, ws){
-	if(e.target.classList.contains("forward", "reverse", "left", "right")){
+function whichButtonOff(e, ws) {
+	// get button map objects keys
+	// turn classList into array
+	const directions = Object.keys(gpLib.buttonMap);
+	const classes = [].slice.apply(e.target.classList);
+
+	// check if directions are in button map
+	// A,B buttons won't match since they are AOFF, BOFF, etc in map
+	const hault = classes.some(r => directions.indexOf(r) >= 0);
+	if (hault) {
 		ws.send(packJSON("hault"));
 	}
 
-	if(e.target.classList.contains("A")){
+	if (e.target.classList.contains("A")) {
 		ws.send(packJSON("AOFF"));
 	}
-	if(e.target.classList.contains("B")){
+	if (e.target.classList.contains("B")) {
 		ws.send(packJSON("BOFF"));
 	}
-	if(e.target.classList.contains("Y")){
-		ws.send(packJSON("YOFF"));
-	}
-	// if(e.target.classList.contains("X")){
-	// 	ws.send(packJSON("XOFF"));
-	// }
 }
 
 
-// unpack websocket message json
-function packJSON(msg){
-	return JSON.stringify({"message": msg});
+// pack websocket message json
+function packJSON(msg) {
+	return JSON.stringify({ "message": msg });
 }
 
 
 // get values from host and ip fields and start WS connection
 const connection_button = document.getElementById("connection-submit");
-connection_button.addEventListener('click', function(e){
+connection_button.addEventListener('click', function (e) {
 	e.preventDefault();
 	const host = document.getElementById("host-ip").value;
 	const port = document.getElementById("host-port").value;
