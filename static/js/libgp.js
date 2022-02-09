@@ -2,17 +2,15 @@
  * Helper library for gamepads
  * Yoink: https://github.com/beejjorgensen/jsgamepad/blob/master/libgp.js
  */
- gpLib = (function () {
+gpLib = (function () {
 
 	const buttonMap = {
 		"forward": 12,
 		"reverse": 13,
 		"left": 14,
 		"right": 15,
-		"AON": 3,
-		"BON": 2,
-		"XON": 0,
-		"YON": 1
+		"AOFF": 3,
+		"BOFF": 2
 	}
 
 	/**
@@ -25,7 +23,7 @@
 	/**
 	 * Test for new or removed connections
 	 */
-	let testForConnections = (function() {
+	let testForConnections = (function () {
 
 		// Keep track of the connection count
 		let connectionCount = 0;
@@ -67,7 +65,7 @@
 	 * @return {Array} The clamped X and Y values
 	 */
 	function clamp(x, y) {
-		let m = Math.sqrt(x*x + y*y); // Magnitude (length) of vector
+		let m = Math.sqrt(x * x + y * y); // Magnitude (length) of vector
 
 		// If the length greater than 1, normalize it (set it to 1)
 		if (m > 1) {
@@ -106,7 +104,7 @@
 	 */
 	function getButtons() {
 		const gamepad = navigator.getGamepads()[0];
-		if(!gamepad) return;
+		if (!gamepad) return;
 
 		let rtn = {};
 		Object.keys(buttonMap).forEach(key => {
@@ -122,7 +120,8 @@
 		deadzone: deadzone,
 		supportsGamepads: supportsGamepads,
 		testForConnections: testForConnections,
-		getButtons: getButtons
+		getButtons: getButtons,
+		buttonMap: buttonMap
 	};
 
 }());

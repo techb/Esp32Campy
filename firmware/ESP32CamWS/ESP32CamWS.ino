@@ -14,9 +14,9 @@
 #include "camera_pins.h"
 
 // network creds and server info
-const char* ssid = "Wu Tang LAN";
-const char* password = "ILoveCheeseBread";
-const char* websocket_server_host = "192.168.0.13";
+const char *ssid = "Wu Tang LAN";
+const char *password = "SloppyBiscuits";
+const char *websocket_server_host = "192.168.0.18";
 const uint16_t websocket_server_port = 5000;
 
 // create buffer to receive data comming from other ws clients
@@ -26,66 +26,70 @@ StaticJsonDocument<255> jsonBuffer;
 using namespace websockets;
 WebsocketsClient client;
 
-
 // quick and dirty for now
 // needs refactor and PWM for movement
-void forward() {
+void forward()
+{
   digitalWrite(12, HIGH);
   digitalWrite(13, LOW);
   digitalWrite(15, HIGH);
   digitalWrite(14, LOW);
 }
-void reverse() {
+void reverse()
+{
   digitalWrite(12, LOW);
   digitalWrite(13, HIGH);
   digitalWrite(15, LOW);
   digitalWrite(14, HIGH);
 }
-void hault() {
+void hault()
+{
   digitalWrite(12, LOW);
   digitalWrite(13, LOW);
   digitalWrite(15, LOW);
   digitalWrite(14, LOW);
 }
-void left() {
+void left()
+{
   digitalWrite(12, LOW);
   digitalWrite(13, HIGH);
   digitalWrite(15, HIGH);
   digitalWrite(14, LOW);
 }
-void right() {
+void right()
+{
   digitalWrite(12, HIGH);
   digitalWrite(13, LOW);
   digitalWrite(15, LOW);
   digitalWrite(14, HIGH);
 }
-void a_button_on() {
+void a_button_on()
+{
   digitalWrite(2, HIGH);
 }
-void a_button_off() {
+void a_button_off()
+{
   digitalWrite(2, LOW);
 }
-void b_button_on() {
+void b_button_on()
+{
   digitalWrite(4, HIGH);
 }
-void b_button_off() {
+void b_button_off()
+{
   digitalWrite(4, LOW);
 }
-void x_button_on() {
-  digitalWrite(3, HIGH);
-}
-void x_button_off() {
-  digitalWrite(3, LOW);
-}
-void y_button_on() {
+void y_button_on()
+{
   digitalWrite(1, HIGH);
 }
-void y_button_off() {
+void y_button_off()
+{
   digitalWrite(1, LOW);
 }
 
-
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   // Serial.setDebugOutput(true);
   // Serial.println();
@@ -113,21 +117,23 @@ void setup() {
   config.xclk_freq_hz = 10000000;
   config.pixel_format = PIXFORMAT_JPEG;
 
-  //init with high specs to pre-allocate larger buffers
+  // init with high specs to pre-allocate larger buffers
   config.frame_size = FRAMESIZE_VGA;
   config.jpeg_quality = 40;
   config.fb_count = 2;
 
   // camera init
   esp_err_t err = esp_camera_init(&config);
-  if (err != ESP_OK) {
+  if (err != ESP_OK)
+  {
     // Serial.printf("Camera init failed with error 0x%x", err);
     return;
   }
 
   // connect to wifi
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     // Serial.print(".");
   }
@@ -136,30 +142,30 @@ void setup() {
 
   // connect to websocket
   // Serial.println("Attempting WebSocket Connection");
-  while(!client.connect(websocket_server_host, websocket_server_port, "/")) {
+  while (!client.connect(websocket_server_host, websocket_server_port, "/"))
+  {
     delay(500);
     // Serial.print(".");
   }
   // Serial.println("Websocket Connected!");
 
   int res = 0;
-  sensor_t * s = esp_camera_sensor_get();
+  sensor_t *s = esp_camera_sensor_get();
   res = s->set_framesize(s, (framesize_t)9);
 
   // handle json data from web interface
-  client.onMessage([](WebsocketsMessage msg) {
+  client.onMessage([](WebsocketsMessage msg)
+                   {
     String raw_data = msg.data();
-    handle_json(raw_data);
-  });
+    handle_json(raw_data); });
 
   pinMode(12, OUTPUT); // IN1 MA
   pinMode(13, OUTPUT); // IN2 MA
   pinMode(15, OUTPUT); // IN3 MB
   pinMode(14, OUTPUT); // IN4 MB
-  pinMode(2, OUTPUT); // A
-  pinMode(4, OUTPUT); // B
-  pinMode(1, OUTPUT); // Y
-  // pinMode(3, INPUT); // RX has to be input
+  pinMode(2, OUTPUT);  // A
+  pinMode(4, OUTPUT);  // B
+  pinMode(1, OUTPUT);  // Y
 
   // set everything low so the bot doesn't go crazy on startup
   digitalWrite(12, LOW);
@@ -171,11 +177,12 @@ void setup() {
   digitalWrite(1, LOW);
 }
 
-
 // handle incoming websocket messages
-void handle_json(String raw_data) {
+void handle_json(String raw_data)
+{
   DeserializationError error = deserializeJson(jsonBuffer, raw_data);
-  if (error) {
+  if (error)
+  {
     // Serial.print(F("deserializeJson() failed: "));
     // Serial.println(error.f_str());
     return;
@@ -183,74 +190,78 @@ void handle_json(String raw_data) {
 
   // quick and dirty for now
   // needs refactor
-  const char* message = jsonBuffer["message"];
+  const char *message = jsonBuffer["message"];
 
   // check message sent and deligate functions to execute
-  if(strcmp(message, "forward") == 0){
+  if (strcmp(message, "forward") == 0)
+  {
     forward();
   }
-  if(strcmp(message, "reverse") == 0){
+  if (strcmp(message, "reverse") == 0)
+  {
     reverse();
   }
-  if(strcmp(message, "hault") == 0){
+  if (strcmp(message, "hault") == 0)
+  {
     hault();
   }
-  if(strcmp(message, "left") == 0){
+  if (strcmp(message, "left") == 0)
+  {
     left();
   }
-  if(strcmp(message, "right") == 0){
+  if (strcmp(message, "right") == 0)
+  {
     right();
   }
 
-  if(strcmp(message, "AON") == 0){
+  if (strcmp(message, "AON") == 0)
+  {
     a_button_on();
   }
-  if(strcmp(message, "AOFF") == 0){
+  if (strcmp(message, "AOFF") == 0)
+  {
     a_button_off();
   }
-  if(strcmp(message, "BON") == 0){
+  if (strcmp(message, "BON") == 0)
+  {
     b_button_on();
   }
-  if(strcmp(message, "BOFF") == 0){
+  if (strcmp(message, "BOFF") == 0)
+  {
     b_button_off();
   }
-
-  // Can run into issues here, these pins are used for UART and programming
-  // They can not have a load on them when programming
-  if(strcmp(message, "XON") == 0){
-    x_button_on();
-  }
-  if(strcmp(message, "XOFF") == 0){
-    x_button_off();
-  }
-  if(strcmp(message, "YOFF") == 0){
+  if (strcmp(message, "YOFF") == 0)
+  {
     y_button_on();
   }
-  if(strcmp(message, "YOFF") == 0){
+  if (strcmp(message, "YOFF") == 0)
+  {
     y_button_off();
   }
 }
 
-
-void loop() {
+void loop()
+{
   // check for any incoming messages
   client.poll();
 
   // get new image from camera
   camera_fb_t *fb = esp_camera_fb_get();
-  if(!fb) {
+  if (!fb)
+  {
     // Serial.println("Camera capture failed");
     esp_camera_fb_return(fb);
     return;
   }
 
   // check it's in jpeg, needed I think for the raw blob binary?
-  if(fb->format != PIXFORMAT_JPEG) {
+  if (fb->format != PIXFORMAT_JPEG)
+  {
     // Serial.println("Non-JPEG data not implemented");
     return;
   }
 
   // send to websocket
-  client.sendBinary((const char*) fb->buf, fb->len);
+  client.sendBinary((const char *)fb->buf, fb->len);
   esp_camera_fb_return(fb);
 }
