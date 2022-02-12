@@ -53,10 +53,9 @@ There is also OctoLapse comments, those can be ignored if not using OctoLapse, o
 **----------------**
 ![stl preview 10 hours](READMEFILES/img/new-design-3d.png)
 
-#### Remixed
+#### Remixed From
 - cam case: https://www.thingiverse.com/thing:4107609
 - 18640 battery holder: https://www.thingiverse.com/thing:2339441
-- base for battery holder: https://www.thingiverse.com/thing:2756968
 - SMARS robot: https://www.thingiverse.com/thing:2662828
 
 
