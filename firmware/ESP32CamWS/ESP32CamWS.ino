@@ -4,10 +4,6 @@
 #include <ArduinoWebsockets.h>
 #include <ArduinoJson.h>
 
-/*
-  All Serial.print is commented out so the bot doesn't go crazy with GPIO 1 TX activity
-*/
-
 // specific to my board yours might be different if
 // not using the board listed in the BOM
 #define CAMERA_MODEL_AI_THINKER
@@ -15,7 +11,7 @@
 
 // network creds and server info
 const char *ssid = "Wu Tang LAN";
-const char *password = "SloppyBiscuits";
+const char *password = "PostitKnockers";
 const char *websocket_server_host = "192.168.0.18";
 const uint16_t websocket_server_port = 5000;
 
@@ -79,20 +75,11 @@ void b_button_off()
 {
   digitalWrite(4, LOW);
 }
-void y_button_on()
-{
-  digitalWrite(1, HIGH);
-}
-void y_button_off()
-{
-  digitalWrite(1, LOW);
-}
 
 void setup()
 {
   Serial.begin(115200);
   // Serial.setDebugOutput(true);
-  // Serial.println();
 
   // set camera pins and settings
   camera_config_t config;
@@ -126,7 +113,7 @@ void setup()
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK)
   {
-    // Serial.printf("Camera init failed with error 0x%x", err);
+    Serial.printf("Camera init failed with error 0x%x", err);
     return;
   }
 
@@ -135,25 +122,28 @@ void setup()
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
-    // Serial.print(".");
+    Serial.print(".");
   }
-  // Serial.println("");
-  // Serial.println("WiFi connected");
+  Serial.println("");
+  Serial.println("WiFi connected");
 
   // connect to websocket
-  // Serial.println("Attempting WebSocket Connection");
+  Serial.println("Attempting WebSocket Connection");
   while (!client.connect(websocket_server_host, websocket_server_port, "/"))
   {
     delay(500);
-    // Serial.print(".");
+    Serial.print(".");
   }
-  // Serial.println("Websocket Connected!");
+  Serial.println("Websocket Connected!");
 
   int res = 0;
   sensor_t *s = esp_camera_sensor_get();
   res = s->set_framesize(s, (framesize_t)9);
 
   // handle json data from web interface
+  // handle_json is the callback where the actual,
+  //   logic lives when recieving websocket messages
+  // the auto formatting on save, is ugly af...
   client.onMessage([](WebsocketsMessage msg)
                    {
     String raw_data = msg.data();
@@ -165,7 +155,6 @@ void setup()
   pinMode(14, OUTPUT); // IN4 MB
   pinMode(2, OUTPUT);  // A
   pinMode(4, OUTPUT);  // B
-  pinMode(1, OUTPUT);  // Y
 
   // set everything low so the bot doesn't go crazy on startup
   digitalWrite(12, LOW);
@@ -174,7 +163,6 @@ void setup()
   digitalWrite(14, LOW);
   digitalWrite(2, LOW);
   digitalWrite(4, LOW);
-  digitalWrite(1, LOW);
 }
 
 // handle incoming websocket messages
@@ -183,8 +171,8 @@ void handle_json(String raw_data)
   DeserializationError error = deserializeJson(jsonBuffer, raw_data);
   if (error)
   {
-    // Serial.print(F("deserializeJson() failed: "));
-    // Serial.println(error.f_str());
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
     return;
   }
 
@@ -230,14 +218,6 @@ void handle_json(String raw_data)
   {
     b_button_off();
   }
-  if (strcmp(message, "YOFF") == 0)
-  {
-    y_button_on();
-  }
-  if (strcmp(message, "YOFF") == 0)
-  {
-    y_button_off();
-  }
 }
 
 void loop()
@@ -249,7 +229,7 @@ void loop()
   camera_fb_t *fb = esp_camera_fb_get();
   if (!fb)
   {
-    // Serial.println("Camera capture failed");
+    Serial.println("Camera capture failed");
     esp_camera_fb_return(fb);
     return;
   }
@@ -257,7 +237,7 @@ void loop()
   // check it's in jpeg, needed I think for the raw blob binary?
   if (fb->format != PIXFORMAT_JPEG)
   {
-    // Serial.println("Non-JPEG data not implemented");
+    Serial.println("Non-JPEG data not implemented");
     return;
   }
 
