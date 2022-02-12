@@ -4,10 +4,12 @@ import threading, time
 from classes.WSServer import WSServer
 import classes.FlaskServer as fs
 
+WSPORT = 5000
+FSPORT =  4242
 
 # Setup and run Websocket server
 def runWS():
-	ws = WSServer(host='0.0.0.0', port=5000)
+	ws = WSServer(host='0.0.0.0', port=WSPORT)
 	print("[+] Starting WebSocket Server")
 	ws.run()
 
@@ -15,7 +17,7 @@ def runWS():
 # Setup and run Flask server
 def runFS():
 	print("[+] Starting Flask Server")
-	fs.run(host='0.0.0.0', port=4242)
+	fs.run(host='0.0.0.0', port=FSPORT)
 
 
 def main():

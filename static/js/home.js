@@ -68,11 +68,11 @@ function WSConnection(host, port) {
 	const buttons = document.querySelectorAll('.button');
 	for (let i = 0; i < buttons.length; i++) {
 		buttons[i].addEventListener('mousedown', function (e) {
-			whichButtonOn(e, ws);
+			whichButton(e, ws, true);
 			e.preventDefault();
 		});
 		buttons[i].addEventListener('mouseup', function (e) {
-			whichButtonOff(e, ws);
+			whichButton(e, ws, false);
 			e.preventDefault();
 		});
 	}
@@ -100,46 +100,45 @@ function WSConnection(host, port) {
 	}
 }
 
-// find which button was pressed or released
-// quick and dirty needs refactor
-function whichButtonOn(e, ws) {
-	if (e.target.classList.contains("forward")) {
-		ws.send(packJSON("forward"));
-	}
-	if (e.target.classList.contains("reverse")) {
-		ws.send(packJSON("reverse"));
-	}
-	if (e.target.classList.contains("left")) {
-		ws.send(packJSON("left"));
-	}
-	if (e.target.classList.contains("right")) {
-		ws.send(packJSON("right"));
-	}
-	if (e.target.classList.contains("A")) {
-		ws.send(packJSON("AON"));
-	}
-	if (e.target.classList.contains("B")) {
-		ws.send(packJSON("BON"));
-	}
-}
-function whichButtonOff(e, ws) {
-	// get button map objects keys
-	// turn classList into array
-	const directions = Object.keys(gpLib.buttonMap);
-	const classes = [].slice.apply(e.target.classList);
 
-	// check if directions are in button map
-	// A,B buttons won't match since they are AOFF, BOFF, etc in map
-	const hault = classes.some(r => directions.indexOf(r) >= 0);
-	if (hault) {
-		ws.send(packJSON("hault"));
-	}
+function whichButton(e, ws, onoff) {
+	if (onoff) {
+		if (e.target.classList.contains("forward")) {
+			ws.send(packJSON("forward"));
+		}
+		if (e.target.classList.contains("reverse")) {
+			ws.send(packJSON("reverse"));
+		}
+		if (e.target.classList.contains("left")) {
+			ws.send(packJSON("left"));
+		}
+		if (e.target.classList.contains("right")) {
+			ws.send(packJSON("right"));
+		}
+		if (e.target.classList.contains("A")) {
+			ws.send(packJSON("AON"));
+		}
+		if (e.target.classList.contains("B")) {
+			ws.send(packJSON("BON"));
+		}
 
-	if (e.target.classList.contains("A")) {
-		ws.send(packJSON("AOFF"));
-	}
-	if (e.target.classList.contains("B")) {
-		ws.send(packJSON("BOFF"));
+	} else {
+		// get button map objects keys
+		// turn classList into array
+		const directions = Object.keys(gpLib.buttonMap);
+		const classes = [].slice.apply(e.target.classList);
+		// check if directions are in button map
+		// A,B buttons won't match since they are AOFF, BOFF in map
+		const hault = classes.some(r => directions.indexOf(r) >= 0);
+		if (hault) {
+			ws.send(packJSON("hault"));
+		}
+		if (e.target.classList.contains("A")) {
+			ws.send(packJSON("AOFF"));
+		}
+		if (e.target.classList.contains("B")) {
+			ws.send(packJSON("BOFF"));
+		}
 	}
 }
 
