@@ -1,26 +1,26 @@
 # Esp32Campy
-Python implementation for a WebSocket server handling ESP32 Cam module streams. Flask server to handle front-end and house the JS used that does most of the WebSocket work. Since this is using a server to handle everything, the limit for concurrent connections, all receiving the live stream and control access, is high.
+Python implementation for a WebSocket server handling ESP32 Cam module streams. Flask server to handle front-end and house the JS used that does most of the WebSocket work you see. Since this is using a server to handle everything, the limit for concurrent connections, all receiving the live stream and control access, is high.
 
-! This is a fun hobby project and not meant for use in production environments. !
+**This is a fun hobby project and not meant for use in production environments.**
 
----
 
-ESP == ESP32 Cam Module
-WS == Web Socket
-FS == Flask Server
+| ABV | == | Abbreviation |
+|-----|---|----------------|
+| ESP | == | ESP Cam Module |
+| WS  | == | Web Socket     |
+| FS  | == | Flask Server   |
 
----
 
-- **WS Server**: Handles the websocket connections. Tracks currently connected clients and removes them when their connections drop. When the WS server receives  messages/data it will echo/resend it to all other connected clients. I made it where you need to put in the WS address information incase you have multiple devices running at once. You can connect to the WS of each bot/device/ESP on the network if you know the IP:PORT address.
+- **WS Server**: Handles the websocket connections. Tracks currently connected clients and removes them when their connections drop. When the WS server receives  messages/data it will echo/resend it to all other connected clients. I wrote it where you need to put in the WS address:port incase you have multiple devices running at once or multi-client connectons. You can connect to the WS of each bot/device/ESP on the network if you know the IP:PORT address.
 
-- **Flask**: Simple flask server handling front-end connections. Serves a single html page containing an img tag for the video data and buttons to control the ESP32 Cam module. This is split up into 3 (three) main places: `static`, `templates`, `classes/FlaskServer.py`. Each containing the respective code.
+- **Flask**: Simple flask server handling front-end connections. Serves a single html page containing an img tag for the video data and buttons to control the ESP. This is split up into 3 (three) main places: `static`, `templates`, `classes/FlaskServer.py`. Each containing the respective code. This is the same IP address as the WS server, but a different port.
   - `static`: JavaScript and CSS
   - `templates`: Flask HTML templates
-  - `classes/FlaskServer.py`: Flask 
+  - `classes/FlaskServer.py`: Flask Server Class
 
 ![Screenshot 1](READMEFILES/img/splash-page.png)
-![Screenshot 2](READMEFILES/img/waiting-on-espcam.png)
-![Screenshot 3](READMEFILES/img/working-stream-low-rez.png)
+![Screenshot 2](READMEFILES/img/new-connecting.png)
+![Screenshot 3](READMEFILES/img/new-working-screenshot.png)
 
 
 ## Software Requirements
@@ -51,20 +51,21 @@ If you don't use a BLTouch you will need to remove `G29 ; Level bed` in the .gco
 There is also OctoLapse comments, those can be ignored if not using OctoLapse, or removed if you prefer your own config.
 
 **----------------**
-**UPDATE ME: OLD DOESN'T FIT :: NEW VERIONS ON THE WAY**
-![stl preview 10 hours](3DPrint/Slice-Screenshot.png)
+![stl preview 10 hours](READMEFILES/img/new-design-3d.png)
 
 #### Remixed
-- cam case: https://www.thingiverse.com/thing:4191077
-- 18640 battery holder: https://www.thingiverse.com/thing:2339441/files
-- base for battery holder: https://www.thingiverse.com/thing:2756968/files
+- cam case: https://www.thingiverse.com/thing:4107609
+- 18640 battery holder: https://www.thingiverse.com/thing:2339441
+- base for battery holder: https://www.thingiverse.com/thing:2756968
 - SMARS robot: https://www.thingiverse.com/thing:2662828
+
 
 ## Schematics
 EasyEDA somehow did not save my project... This is the only thing I have from it currently. It is simple enough though. H-Bridge for the motors, voltage regulation, and some optional stuff to make programming easier but not needed (set up for the next project teehee). 
 
 Tripple check connections and cross reference always, I am but a simple man and mess up a lot lol. **Pay attention to orientation and GPIO**
 ![image of schematics](READMEFILES/img/Schematic.png)
+
 
 ## Run
 - `$ git clone git@github.com:techb/Esp32Campy.git`
@@ -86,6 +87,7 @@ Tripple check connections and cross reference always, I am but a simple man and 
 ## To Do
 - Clean 3D print files
 - Fix mobile
+- Hide/Show connecting on disconnect/reconnect of ESP
 - Build/Project blog write up
 - Add hosts file for blah.local addresses
 - V2 use UART & arduino controlling the low level bot controls like movement. Stay REST-ish, realtime req->parse->bot control
@@ -103,4 +105,3 @@ Tripple check connections and cross reference always, I am but a simple man and 
 - Gamepad support: https://w3c.github.io/gamepad/#remapping
 - Gamepad tutorial: https://beej.us/blog/data/javascript-gamepad/
 - RX GPIO 3 is always and only an input: https://electronics.stackexchange.com/a/445636
-- New stl for cam case: https://www.thingiverse.com/thing:4107609/files
