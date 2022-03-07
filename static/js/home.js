@@ -22,6 +22,12 @@ function showError() {
 }
 
 
+// pack websocket message json
+function packJSON(msg) {
+	return JSON.stringify({ "message": msg });
+}
+
+
 // handle websocket connection
 function WSConnection(host, port) {
 	// check if connection form fields were empty
@@ -140,12 +146,6 @@ function whichButton(e, ws, onoff) {
 			ws.send(packJSON("BOFF"));
 		}
 	}
-}
-
-
-// pack websocket message json
-function packJSON(msg) {
-	return JSON.stringify({ "message": msg });
 }
 
 

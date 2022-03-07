@@ -84,10 +84,10 @@ Tripple check connections and cross reference always, I am but a simple man and 
 
 
 ## To Do
+- Build/Project blog write up
 - Clean 3D print files
 - Fix mobile
 - Hide/Show connecting on disconnect/reconnect of ESP
-- Build/Project blog write up
 - Add hosts file for blah.local addresses
 - V2 use UART & arduino controlling the low level bot controls like movement. Stay REST-ish, realtime req->parse->bot control
 
